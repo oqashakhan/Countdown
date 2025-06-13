@@ -94,9 +94,20 @@ body, html {
     </div>
   </div>
 
-  <script >// Set countdown duration to 3 hours in milliseconds
-const countdownTime = 10 * 60 * 60 * 1000;
-const endTime = new Date().getTime() + countdownTime;
+  <script >const HOURS = 10;
+const COUNTDOWN_KEY = 'countdown_end_time';
+
+// Check if a countdown end time is already saved
+let endTime = localStorage.getItem(COUNTDOWN_KEY);
+
+if (!endTime) {
+  // Set countdown to 10 hours from now
+  endTime = new Date().getTime() + HOURS * 60 * 60 * 1000;
+  localStorage.setItem(COUNTDOWN_KEY, endTime);
+} else {
+  // Convert string to number
+  endTime = parseInt(endTime);
+}
 
 function updateCountdown() {
   const now = new Date().getTime();
@@ -107,6 +118,7 @@ function updateCountdown() {
     document.getElementById("minutes").textContent = "00";
     document.getElementById("seconds").textContent = "00";
     clearInterval(timerInterval);
+    localStorage.removeItem(COUNTDOWN_KEY); // Reset storage
     return;
   }
 
@@ -121,6 +133,7 @@ function updateCountdown() {
 
 const timerInterval = setInterval(updateCountdown, 1000);
 updateCountdown();
+
 </script>
 </body>
 </html>
